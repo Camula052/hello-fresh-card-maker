@@ -21,17 +21,21 @@ def render_page(pdf, page_number, zoom=2):
 
     return image
 
-def analyze_pdf(pdf):
+def parse_recipe(pdf):
+
+    recipe = Recipe()
 
     page1 = pdf.load_page(0)
 
-    data = page1.get_text("dict")
+    recipe.title = parse_title(page1)
 
-    print("=" * 60)
+    return recipe
 
-    print("TEXTBLÖCKE")
+def parse_title(page):
 
-    print("=" * 60)
+    data = page.get_text("dict")
+
+    longest = ""
 
     for block in data["blocks"]:
 
@@ -44,15 +48,9 @@ def analyze_pdf(pdf):
             for span in line["spans"]:
                 text += span["text"]
 
-        if text.strip():
-            print(text)
+        text = text.strip()
 
-    print("=" * 60)
+        if len(text) > len(longest):
+            longest = text
 
-    print("BILDER")
-
-    print("=" * 60)
-
-    images = page1.get_images()
-
-    print(f"{len(images)} Bilder gefunden")
+    return longest

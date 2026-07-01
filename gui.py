@@ -1,7 +1,7 @@
 import customtkinter as ctk
 from tkinter import filedialog
 from PIL import ImageTk
-from parser import load_pdf, render_page, analyze_pdf
+from parser import load_pdf, render_page, parse_recipe
 
 class MainWindow(ctk.CTk):
 
@@ -51,8 +51,9 @@ class MainWindow(ctk.CTk):
             return
 
         pdf = load_pdf(filename)
-
-        analyze_pdf(pdf)
+        
+        recipe = parse_recipe(pdf)
+        print(recipe.title)
 
         page1 = render_page(pdf, 0)
         page2 = render_page(pdf, 1)
